@@ -1,0 +1,28 @@
+version: "3.8"
+
+networks:
+  ppgti-rabbitmq:
+    driver: bridge
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.9.13-management-alpine
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ppgti
+      RABBITMQ_DEFAULT_PASS: ppgti
+      RABBITMQ_DEFAULT_VHOST: ppgti_host
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/log:/var/log/rabbitmq
+    networks:
+      - ppgti-rabbitmq
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
+
