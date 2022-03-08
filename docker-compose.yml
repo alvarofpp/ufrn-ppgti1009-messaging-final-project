@@ -1,3 +1,4 @@
+---
 version: "3.8"
 
 networks:
@@ -7,14 +8,14 @@ networks:
 services:
   rabbitmq:
     image: rabbitmq:3.9.13-management-alpine
-    container_name: rabbitmq
+    container_name: ppgti1009_rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ppgti
       RABBITMQ_DEFAULT_PASS: ppgti
       RABBITMQ_DEFAULT_VHOST: ppgti_host
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - ./rabbitmq/data:/var/lib/rabbitmq
       - ./rabbitmq/log:/var/log/rabbitmq
@@ -26,3 +27,15 @@ services:
       timeout: 15s
       retries: 1
 
+  restaurant:
+    build:
+      context: restaurant/.
+    image: alvarofpp/ppgti1009-streamlit-app
+    command: streamlit run app.py
+    container_name: ppgti1009_restaurant
+    networks:
+      - ppgti-rabbitmq
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./restaurant:/app
