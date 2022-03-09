@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 
 from app.models import Order
 from app.services import ModelServiceBase, ModelType
@@ -9,9 +9,6 @@ class OrderService(ModelServiceBase):
 
     def __init__(self):
         super().__init__(Order)
-
-    def count_by_ids(self, db: Session, ids: List[int]) -> int:
-        return self.query(db).filter(self.model.id.in_(ids)).count()
 
     def search(self, db: Session, filters: Dict) -> ModelType:
         query = self.query(db)

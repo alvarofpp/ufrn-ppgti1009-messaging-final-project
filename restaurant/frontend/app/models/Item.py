@@ -8,10 +8,7 @@ class Item:
     name: str
     description: str
     price: float
-    available: bool
-    menu_id: str
-    created_at: str
-    update_at: str
+    order_id: int
 
     def to_dict(self) -> Dict:
         return {
@@ -19,8 +16,15 @@ class Item:
             'name': self.name,
             'description': self.description,
             'price': self.price,
-            'available': self.available,
-            'menu_id': self.menu_id,
-            'created_at': self.created_at,
-            'update_at': self.update_at,
+            'order_id': self.order_id,
         }
+
+    @staticmethod
+    def create(data: Dict) -> 'Item':
+        return Item(
+            id=data['id'],
+            name=data['name'],
+            description=data['description'],
+            price=data['price'],
+            order_id=data['order_id'],
+        )

@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "costumer_id": 1,
+    "customer_id": 1,
     "status": "ORDER_NEW",
     "total_price": 12.5,
     "items": [
@@ -21,7 +21,7 @@
   },
   {
     "id": 2,
-    "costumer_id": 1,
+    "customer_id": 1,
     "status": "ORDER_DELIVERED",
     "total_price": 12.5,
     "items": [
@@ -41,7 +41,7 @@
   },
   {
     "id": 3,
-    "costumer_id": 2,
+    "customer_id": 2,
     "status": "ORDER_IN_DELIVERY",
     "total_price": 10.0,
     "items": [

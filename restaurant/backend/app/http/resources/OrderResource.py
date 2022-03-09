@@ -10,7 +10,7 @@ class OrderResource(BaseModel):
         None,
         title='Order identifier',
     )
-    costumer_id: int = Field(
+    customer_id: int = Field(
         None,
         title='Customer identifier',
     )
@@ -32,7 +32,7 @@ class OrderResource(BaseModel):
         print(order.items)
         data = {
             'id': order.id,
-            'costumer_id': order.costumer_id,
+            'customer_id': order.customer_id,
             'status': order.status,
             'total_price': order.total_price,
             'items': [ItemResource.to_dict(item) for item in order.items],

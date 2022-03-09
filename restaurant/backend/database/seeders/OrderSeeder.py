@@ -28,7 +28,7 @@ class OrderSeeder(Seeder):
     def map(data) -> Dict:
         return {
             'id': data['id'],
-            'costumer_id': data['costumer_id'],
+            'customer_id': data['customer_id'],
             'status': data['status'],
             'total_price': data['total_price'],
         }
