@@ -27,15 +27,53 @@ services:
       timeout: 15s
       retries: 1
 
-  restaurant:
+  restaurant-frontend:
     build:
-      context: restaurant/.
-    image: alvarofpp/ppgti1009-streamlit-app
+      context: restaurant/frontend/.
     command: streamlit run app.py
-    container_name: ppgti1009_restaurant
+    container_name: ppgti1009_restaurant_frontend
     networks:
       - ppgti-rabbitmq
     ports:
       - "8501:8501"
     volumes:
-      - ./restaurant:/app
+      - ./restaurant/frontend:/app
+
+  restaurant-backend:
+    build:
+      context: restaurant/backend/.
+    container_name: ppgti1009_restaurant_backend
+    volumes:
+      - ./restaurant/backend:/app
+    networks:
+      - ppgti-rabbitmq
+    ports:
+      - "8000:8000"
+    environment:
+      APP_MODULE: main:app
+      VARIABLE_NAME: app
+      PORT: 8000
+      LOG_LEVEL: debug
+    command: /start-reload.sh
+    links:
+      - restaurant-database
+
+  restaurant-database:
+    image: postgres:12.4-alpine
+    container_name: restaurant_postgres
+    networks:
+      - ppgti-rabbitmq
+    ports:
+      - "49165:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: restaurant-db
+      LC_ALL: C
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 7s
+      timeout: 5s
+    volumes:
+      - ./containers/restaurant/data/pgdata:/var/lib/postgresql/data
