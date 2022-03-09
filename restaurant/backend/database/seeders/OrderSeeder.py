@@ -24,6 +24,14 @@ class OrderSeeder(Seeder):
             engine.execute(Order.__table__.insert(), orders)
             engine.execute(Item.__table__.insert(), items)
 
+            OrderSeeder.start_id_seq('orders')
+            OrderSeeder.start_id_seq('items')
+
+    @staticmethod
+    def start_id_seq(table: str):
+        query_id_seq = 'SELECT setval(\'{}_id_seq\', max(id)+1) FROM {};'
+        engine.execute(query_id_seq.format(table, table))
+
     @staticmethod
     def map(data) -> Dict:
         return {

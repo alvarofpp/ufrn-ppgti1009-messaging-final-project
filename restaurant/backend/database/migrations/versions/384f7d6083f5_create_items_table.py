@@ -12,8 +12,8 @@ depends_on = None
 def upgrade():
     op.create_table(
         'items',
-        sa.Column('id', sa.Integer, primary_key=True),
-        sa.Column('name', sa.String(150), nullable=False, unique=True),
+        sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column('name', sa.String(150), nullable=False),
         sa.Column('description', sa.Text, nullable=True),
         sa.Column('price', sa.Float, nullable=False),
         sa.Column('order_id', sa.Integer, nullable=False),
