@@ -28,3 +28,22 @@ lint:
 .PHONY: logs
 logs:
 	@docker-compose logs --follow
+
+##############
+# RESTAURANT #
+##############
+
+.PHONY:
+restaurant-db-reset: restaurant-db-rollback restaurant-db-create restaurant-db-seed
+
+.PHONY:
+restaurant-db-create:
+	@docker-compose exec restaurant-backend alembic upgrade head
+
+.PHONY:
+restaurant-db-rollback:
+	@docker-compose exec restaurant-backend alembic downgrade base
+
+.PHONY:
+restaurant-db-seed:
+	@docker-compose exec restaurant-backend python database/seeders/database_seeder.py
