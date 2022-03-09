@@ -1,6 +1,7 @@
-from app.models import Item
 from dataclasses import dataclass
 from typing import Dict, List
+
+from app.models import Item
 
 
 @dataclass

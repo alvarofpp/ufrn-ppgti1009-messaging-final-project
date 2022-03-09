@@ -1,7 +1,6 @@
 from typing import List
 
 from app.mixins import RenderMixin
-from app.views import ItemList
 
 
 class OrderTable(RenderMixin):

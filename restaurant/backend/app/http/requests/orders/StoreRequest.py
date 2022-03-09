@@ -1,46 +1,49 @@
 from typing import List
 
+from app.enums import OrderStatusEnum
 from app.http.requests import BaseRequest
+from app.http.requests.inputs import ItemInput
 from pydantic import Field, validator
 
 
 class StoreRequest(BaseRequest):
-    name: str = Field(
+    customer_id: int = Field(
         None,
-        title='The name of your team',
-        max_length=50,
+        title='Customer identifier',
     )
-    pokemon_ids: List[int] = Field(
+    status: str = Field(
         None,
-        title='A list with the identifiers of the pokemons chosen for your team',
-        max_items=6,
+        title='Order status',
+    )
+    total_price: float = Field(
+        None,
+        title='Total price',
+    )
+    items: List[ItemInput] = Field(
+        None,
+        title='A item list',
         min_items=1,
     )
 
-    @validator('name')
+    @validator('status')
     def name_must_be_at_least_five_chars(cls, value: str) -> str:
-        len_name = len(value)
-
-        if len_name < 5:
-            raise ValueError('The team name must be at least 5 characters long')
-
-        return value
-
-    @validator('pokemon_ids')
-    def amount_of_pokemons(cls, value: List[int]) -> List[int]:
-        len_pokemons = len(value)
-
-        if len_pokemons == 0:
-            raise ValueError('A team must have at least one pokemon')
-        if len(value) > 6:
-            raise ValueError('A team can have a maximum of 6 pokemons')
+        if value not in OrderStatusEnum.list():
+            raise ValueError('Status invalid')
 
         return value
 
     class Config:
         schema_extra = {
             'example': {
-                'name': 'Meliuz team',
-                'pokemon_ids': [1, 2, 3, 4, 5, 6],
+                'customer_id': 1,
+                'status': OrderStatusEnum.ORDER_NEW,
+                'total_price': 15.0,
+                'items': [
+                    {
+                        'name': 'Item 1',
+                        'description': 'Lorem ipsum dolor sit amet',
+                        'price': 5.0,
+                    },
+                ],
             },
         }

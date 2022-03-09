@@ -29,7 +29,7 @@ class OrderSeeder(Seeder):
 
     @staticmethod
     def start_id_seq(table: str):
-        query_id_seq = 'SELECT setval(\'{}_id_seq\', max(id)+1) FROM {};'
+        query_id_seq = "SELECT setval('{}_id_seq', max(id)+1) FROM {};"
         engine.execute(query_id_seq.format(table, table))
 
     @staticmethod
