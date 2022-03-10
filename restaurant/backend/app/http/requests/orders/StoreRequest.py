@@ -36,7 +36,7 @@ class StoreRequest(BaseRequest):
         schema_extra = {
             'example': {
                 'customer_id': 1,
-                'status': OrderStatusEnum.ORDER_NEW,
+                'status': OrderStatusEnum.ORDER_NEW.value,
                 'total_price': 15.0,
                 'items': [
                     {

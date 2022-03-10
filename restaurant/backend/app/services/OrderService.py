@@ -1,5 +1,6 @@
 from typing import Dict
 
+from app.enums import OrderStatusEnum
 from app.http.requests.orders import StoreRequest
 from app.models import Order
 from app.services import ItemService, ModelServiceBase, ModelType
@@ -36,3 +37,19 @@ class OrderService(ModelServiceBase):
             query = query.where(self.model.status == filters['status'])
 
         return query.all()
+
+    def change_status(self, db: Session, order_id: int) -> ModelType:
+        order = self.find_or_fail(db, order_id)
+        self.update(db, order_id, {
+            'status': self.get_next_status(order),
+        })
+
+        return order
+
+    def get_next_status(self, order: Order) -> str:
+        if order.status == OrderStatusEnum.ORDER_NEW.value:
+            return OrderStatusEnum.ORDER_ACCEPTED.value
+        if order.status == OrderStatusEnum.ORDER_ACCEPTED.value:
+            return OrderStatusEnum.ORDER_IN_DELIVERY.value
+
+        return OrderStatusEnum.ORDER_DELIVERED.value

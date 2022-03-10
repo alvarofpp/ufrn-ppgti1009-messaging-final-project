@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from app.http.requests.orders import StoreRequest
@@ -39,6 +40,17 @@ async def create(request: StoreRequest, db: Session = Depends(get_db)):
     service = OrderService()
     order = service.create_from_request(db, request)
     queues['created'].send(str(order.id))
-    print('Order created {}'.format(str(order.id)))
+    logging.info('Order created #{}'.format(str(order.id)))
+
+    return OrderResource.to_dict(order)
+
+
+@order_router.put('/{order_id}', response_model=OrderResource)
+async def change_status(order_id: int, db: Session = Depends(get_db)):
+    service = OrderService()
+    order = service.change_status(db, order_id)
+
+    queues['created'].send(str(order.id))
+    logging.info('Change status of Order #{}'.format(str(order.id)))
 
     return OrderResource.to_dict(order)
