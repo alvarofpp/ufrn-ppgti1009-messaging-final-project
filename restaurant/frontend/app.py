@@ -16,6 +16,9 @@ def main():
     """.format(get_config('app.title')))
     global orders
 
+    if st.button('Refresh orders'):
+        orders = OrderService().get_all()
+
     OrderTable(render_component=st).render(orders=orders)
 
 
