@@ -25,4 +25,37 @@ services:
       interval: 5s
       timeout: 15s
       retries: 1
+      
+  expo:
+    build:
+      context: ./cafenamesa-cliente
+      args:
+        - NODE_ENV=development
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+    tty: true
+    ports:
+      - '19006:19006'
+      - '19001:19001'
+      - '19002:19002'
+    volumes:
+      - ./cafenamesa-cliente:/opt/cafenamesa-cliente:delegated
+      - ./cafenamesa-cliente/package.json:/opt/cafenamesa-cliente/package.json
+      - notused:/opt/cafenamesa-cliente/node_modules
+    healthcheck:
+      disable: true
 
+  app:
+    build: ./cafenamesa-ordering
+    container_name: ordering
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./cafenamesa-ordering:/usr/app
+    networks:
+      - ppgti-rabbitmq
+      
+volumes:
+  notused:
