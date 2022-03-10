@@ -1,6 +1,7 @@
 from typing import List
 
 from app.mixins import RenderMixin
+from app.views import OrderStatusButton
 
 
 class OrderTable(RenderMixin):
@@ -12,17 +13,24 @@ class OrderTable(RenderMixin):
         for order in orders:
             expander_header = '#{} - R${}'.format(order.id, order.total_price)
             with self.render_component.expander(expander_header):
-                self.render_component.markdown("""
+                column_one, column_two = self.render_component.columns([2, 1])
+
+                column_one.markdown("""
                 - **Customer**: #{}
                 - **Total price**: R${}
                 - **Status**: {}
-                ---
-                **Items**
                 """.format(
                     order.customer_id,
                     order.total_price,
                     order.status,
                 ))
+
+                OrderStatusButton(render_component=column_two).render(order)
+
+                self.render_component.markdown("""
+                ---
+                **Items**
+                """)
 
                 items_list = ''
                 for item in order.items:
@@ -34,13 +42,3 @@ class OrderTable(RenderMixin):
                     items_list += '\n'
 
                 self.render_component.markdown(items_list)
-
-    def _headers(self) -> str:
-        return """
-        <tr>
-        <th>#</th>
-        <th>Price</th>
-        <th>Items</th>
-        <th>Actions</th>
-        </tr>
-        """

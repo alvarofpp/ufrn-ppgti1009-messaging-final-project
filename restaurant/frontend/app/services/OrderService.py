@@ -17,3 +17,7 @@ class OrderService:
     def get_all(self) -> List[Order]:
         orders = requests.get(self.backend_url + '/v1/orders').json()['data']
         return [Order.create(order) for order in orders]
+
+    def change_status(self, order: Order) -> None:
+        url = self.backend_url + '/v1/orders/{}'.format(order.id)
+        requests.put(url).json()

@@ -20,7 +20,7 @@ class OrderService(ModelServiceBase):
         })
 
         item_service = ItemService()
-        for item in request.get('items'):
+        for item in request.get('items', []):
             item_service.create(db, {
                 'name': item.name,
                 'description': item.description,
