@@ -1,6 +1,5 @@
 import logging
 
-from app import SessionState
 from app.enums import QueueEnum
 from app.mixins import SingletonMixin
 from app.queue import RabbitConsumerBase
@@ -20,4 +19,3 @@ class OrdersCreatedConsumer(RabbitConsumerBase, metaclass=SingletonMixin):
         if message.isdigit():
             # st.experimental_rerun()
             st.info('You have received a new order (#{}). Refresh the page.'.format(message))
-            SessionState.set('order_id', int(message))
