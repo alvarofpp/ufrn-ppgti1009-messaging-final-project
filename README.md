@@ -1,7 +1,7 @@
 # projeto-final-distribuida-ppgti
 
 ```shell
-docker-compose up-base
+make up-base
 ```
 
 ## Restaurant
