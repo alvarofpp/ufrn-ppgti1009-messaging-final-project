@@ -1,10 +1,14 @@
 # projeto-final-distribuida-ppgti
 
 ```shell
-docker-compose up
+docker-compose up-base
 ```
 
 ## Restaurant
+
+```shell
+make up-restaurant
+```
 
 After up the containers, you need to init the restaurant database:
 
