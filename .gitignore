@@ -3,3 +3,8 @@ cafenamesa-cliente/.expo
 cafenamesa-ordering/node_modules
 cafenamesa-restaurante/node_modules
 rabbitmq
+node_modules
+__pycache__
+.idea
+.vscode
+containers/

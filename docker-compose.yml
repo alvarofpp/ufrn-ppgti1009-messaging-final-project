@@ -1,3 +1,4 @@
+---
 version: "3.8"
 
 networks:
@@ -7,14 +8,13 @@ networks:
 services:
   rabbitmq:
     image: rabbitmq:3.9.13-management-alpine
-    container_name: rabbitmq
+    container_name: ppgti1009_rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ppgti
       RABBITMQ_DEFAULT_PASS: ppgti
-      RABBITMQ_DEFAULT_VHOST: ppgti_host
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - ./rabbitmq/data:/var/lib/rabbitmq
       - ./rabbitmq/log:/var/log/rabbitmq
@@ -25,7 +25,60 @@ services:
       interval: 5s
       timeout: 15s
       retries: 1
-      
+
+  restaurant-frontend:
+    build:
+      context: restaurant/frontend/.
+    command: streamlit run app.py
+    container_name: ppgti1009_restaurant_frontend
+    networks:
+      - ppgti-rabbitmq
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./restaurant/frontend:/app
+    links:
+      - rabbitmq
+
+  restaurant-backend:
+    build:
+      context: restaurant/backend/.
+    container_name: ppgti1009_restaurant_backend
+    volumes:
+      - ./restaurant/backend:/app
+    networks:
+      - ppgti-rabbitmq
+    ports:
+      - "8000:8000"
+    environment:
+      APP_MODULE: main:app
+      VARIABLE_NAME: app
+      PORT: 8000
+      LOG_LEVEL: debug
+    command: /start-reload.sh
+    links:
+      - rabbitmq
+
+  restaurant-database:
+    image: postgres:12.4-alpine
+    container_name: ppgti1009_restaurant_postgres
+    networks:
+      - ppgti-rabbitmq
+    ports:
+      - "49165:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: restaurant-db
+      LC_ALL: C
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 7s
+      timeout: 5s
+    volumes:
+      - ./containers/restaurant/data/pgdata:/var/lib/postgresql/data
+
   expo:
     build:
       context: ./cafenamesa-cliente
@@ -56,6 +109,6 @@ services:
       - ./cafenamesa-ordering:/usr/app
     networks:
       - ppgti-rabbitmq
-      
+
 volumes:
   notused:
