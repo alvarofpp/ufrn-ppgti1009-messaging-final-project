@@ -2,11 +2,11 @@
 from .RabbitBase import RabbitBase
 from .RabbitConsumerBase import RabbitConsumerBase
 from .RabbitProducerBase import RabbitProducerBase
-from .OrdersCreatedConsumer import OrdersCreatedConsumer
+from .OrdersCreatedProducer import OrdersCreatedProducer
 
 __all__ = [
     'RabbitBase',
     'RabbitConsumerBase',
     'RabbitProducerBase',
-    'OrdersCreatedConsumer',
+    'OrdersCreatedProducer',
 ]

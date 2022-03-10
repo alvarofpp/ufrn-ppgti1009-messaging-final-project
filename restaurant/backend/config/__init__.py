@@ -1,9 +1,11 @@
 from .app import config as config_app
 from .database import config as config_database
+from .rabbitmq import config as config_rabbitmq
 
 config = {
     'app': config_app,
     'database': config_database,
+    'rabbitmq': config_rabbitmq,
 }
 
 

@@ -29,7 +29,6 @@ class OrderResource(BaseModel):
 
     @staticmethod
     def to_dict(order: Order):
-        print(order.items)
         data = {
             'id': order.id,
             'customer_id': order.customer_id,

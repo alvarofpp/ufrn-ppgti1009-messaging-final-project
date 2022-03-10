@@ -12,7 +12,6 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ppgti
       RABBITMQ_DEFAULT_PASS: ppgti
-      RABBITMQ_DEFAULT_VHOST: ppgti_host
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -38,6 +37,8 @@ services:
       - "8501:8501"
     volumes:
       - ./restaurant/frontend:/app
+    links:
+      - rabbitmq
 
   restaurant-backend:
     build:
@@ -56,11 +57,11 @@ services:
       LOG_LEVEL: debug
     command: /start-reload.sh
     links:
-      - restaurant-database
+      - rabbitmq
 
   restaurant-database:
     image: postgres:12.4-alpine
-    container_name: restaurant_postgres
+    container_name: ppgti1009_restaurant_postgres
     networks:
       - ppgti-rabbitmq
     ports:

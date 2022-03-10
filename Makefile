@@ -9,8 +9,12 @@ down:
 	@docker-compose down
 
 .PHONY:
-up:
-	@docker-compose up
+up-base:
+	@docker-compose up rabbitmq restaurant-database
+
+.PHONY:
+up-restaurant:
+	@docker-compose up restaurant-frontend restaurant-backend
 
 .PHONY:
 up-silent:

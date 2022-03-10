@@ -1,30 +1,27 @@
-from typing import Dict
+# import threading
 
 from app.config import get_config
+from app.queue import OrdersCreatedConsumer
 from app.services import OrderService
 from app.views import OrderTable
 import streamlit as st
-from streamlit.legacy_caching import caching
+# from streamlit.script_run_context import add_script_run_ctx
 
-
-@st.cache
-def get_data() -> Dict:
-    return {
-        'orders': OrderService().get_all(),
-    }
+orders = OrderService().get_all()
 
 
 def main():
     st.markdown("""
     # {}
     """.format(get_config('app.title')))
+    global orders
 
-    if st.button('Refresh orders'):
-        caching.clear_cache()
+    OrderTable(render_component=st).render(orders=orders)
 
-    data = get_data()
 
-    OrderTable(render_component=st).render(orders=data['orders'])
+def rabbit() -> None:
+    consumer = OrdersCreatedConsumer().init()
+    consumer.start_consuming()
 
 
 if __name__ == '__main__':
@@ -33,4 +30,10 @@ if __name__ == '__main__':
         layout='wide',
         initial_sidebar_state='expanded',
     )
+
     main()
+    rabbit()
+
+    # thread_queue = threading.Thread(target=rabbit)
+    # add_script_run_ctx(thread_queue)
+    # thread_queue.start()
