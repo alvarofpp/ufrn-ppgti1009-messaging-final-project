@@ -1,4 +1,4 @@
-# PPGTI1009 - Messaging
+# PPGTI1009 - Final project
 
 Final project of Distributed Programming (PPGTI1009) course of Master's degree in Information Technology
 from the Federal University of Rio Grande do Norte (UFRN), with
